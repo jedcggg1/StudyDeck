@@ -138,6 +138,17 @@ npm run build
 ```
 Generates optimized distribution bundle in `dist/` with precached service worker assets for offline PWA installation.
 
+### Vercel Environment Variables
+
+Add these variables in Vercel Project Settings → Environment Variables, selecting both Preview and Production, then redeploy:
+
+```text
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=your-publishable-or-anon-key
+```
+
+The build also accepts `SUPABASE_URL` and `SUPABASE_ANON_KEY` for existing Vercel projects. Never use a Supabase `service_role` key in frontend variables.
+
 ---
 
 ## 📄 JSON Import/Export Schema (`studydeck_v1`)
