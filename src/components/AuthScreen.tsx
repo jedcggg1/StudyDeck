@@ -77,8 +77,8 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onContinueOffline }) => 
     <main className="min-h-dvh bg-[var(--bg-page)] text-[var(--text-main)] flex items-center justify-center px-4 py-8 sm:px-6">
       <div className="w-full max-w-md space-y-5">
         <section className="brutal-card bg-[var(--bg-card)] p-6 sm:p-8">
-          <div className="flex items-start justify-between gap-4 mb-7">
-            <div>
+          <div className="mb-7">
+            <img src="/logo.png" alt="StudyDeck" className="w-28 sm:w-36 object-contain mb-4" />
               <p className="text-xs font-black uppercase tracking-[0.18em] text-[#1769FF] mb-2">
                 StudyDeck
               </p>
@@ -88,10 +88,6 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onContinueOffline }) => 
               <p className="text-sm font-medium text-[var(--text-muted)] mt-2 leading-relaxed">
                 {isSignIn ? t('Sign in to continue studying.') : t('Save your study progress securely.')}
               </p>
-            </div>
-            <div className="w-12 h-12 shrink-0 border-2 border-[var(--border-color)] bg-[#1769FF] text-white shadow-[3px_3px_0px_var(--shadow-color)] rounded flex items-center justify-center">
-              {isSignIn ? <LogIn className="w-6 h-6" /> : <UserPlus className="w-6 h-6" />}
-            </div>
           </div>
 
           {!isConfigured && (

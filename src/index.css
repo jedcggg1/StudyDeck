@@ -58,6 +58,8 @@ html {
   min-height: 100%;
   background-color: var(--bg-page);
   scroll-behavior: smooth;
+  overflow-x: hidden;
+  overscroll-behavior-x: none;
 }
 
 body {
@@ -67,6 +69,7 @@ body {
   color: var(--text-main);
   min-height: 100dvh;
   overflow-x: hidden;
+  overscroll-behavior-x: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

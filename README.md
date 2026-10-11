@@ -2,7 +2,7 @@
 
 StudyDeck is a functional, open-source, offline-first spaced repetition flashcard web application designed for students and researchers studying STEM and complex subjects without relying on stable internet or remote databases.
 
-![Design Aesthetic](https://raw.githubusercontent.com/studydeck/studydeck/main/public/logo.svg)
+![Design Aesthetic](https://raw.githubusercontent.com/jedcggg1/StudyDeck/main/public/logo.png)
 
 ## 🌟 Highlights & Features
 
@@ -33,7 +33,7 @@ StudyDeck is a functional, open-source, offline-first spaced repetition flashcar
 
 ## 🧠 Spaced Repetition Engine (SM-2)
 
-The SM-2 algorithm is implemented as a standalone, deterministic TypeScript module in [`src/services/sm2.ts`](file:///c:/Users/user/Documents/AI%20camp/src/services/sm2.ts).
+The SM-2 algorithm is implemented as a standalone, deterministic TypeScript module in [`src/services/sm2.ts`](src/services/sm2.ts).
 
 ### Rating Mapping
 - **Again** ($q = 1$): Failure / Complete blackout. Interval resets to 1 day, repetition count resets to 0.
@@ -190,4 +190,4 @@ The build also accepts `SUPABASE_URL` and `SUPABASE_ANON_KEY` for existing Verce
 
 ## 📜 License
 
-Distributed under the [MIT License](file:///c:/Users/user/Documents/AI camp/LICENSE).
+Distributed under the [MIT License](LICENSE).
