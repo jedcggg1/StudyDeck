@@ -32,8 +32,9 @@
   --bg-subtle: #27272C;
   --text-main: #F4F4F5;
   --text-muted: #A1A1AA;
-  --border-color: #08080A;
-  --shadow-color: #08080A;
+  /* Borders must read *lighter* than the surface so the brutalist outline pops on dark. */
+  --border-color: #6B6B7A;
+  --shadow-color: #000000;
   --input-bg: #2B2B32;
 }
 
@@ -258,6 +259,20 @@ select:focus-visible {
 [data-theme='brutalist-dark'] .border-\[\#111111\],
 [data-theme='brutalist-dark'] [class~="border-black"] {
   border-color: var(--border-color) !important;
+}
+
+/* Success / green accents: keep them legible on the dark card. */
+[data-theme='brutalist-dark'] .text-\[\#0B7A43\],
+[data-theme='brutalist-dark'] .text-\[\#12A05C\] {
+  color: var(--success-green) !important;
+}
+
+[data-theme='brutalist-dark'] .border-\[\#0B7A43\] {
+  border-color: var(--success-green) !important;
+}
+
+[data-theme='brutalist-dark'] [class~="text-zinc-400"] {
+  color: var(--text-muted) !important;
 }
 
 [data-theme='brutalist-dark'] .divide-\[\#111111\] > :not([hidden]) ~ :not([hidden]) {
