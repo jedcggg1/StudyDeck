@@ -37,9 +37,9 @@ export default defineConfig(({ mode }) => {
         orientation: 'portrait-primary',
         icons: [
           {
-            src: '/logo.svg',
+            src: '/logo.png',
             sizes: '192x192 512x512',
-            type: 'image/svg+xml',
+            type: 'image/png',
             purpose: 'any maskable'
           }
         ]
