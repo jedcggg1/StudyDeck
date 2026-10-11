@@ -140,6 +140,8 @@ Generates optimized distribution bundle in `dist/` with precached service worker
 
 ### Vercel Environment Variables
 
+`.env.example` and `.env.local` are not uploaded to Vercel. Add the values directly in Vercel Project Settings → Environment Variables.
+
 Add these variables in Vercel Project Settings → Environment Variables, selecting both Preview and Production, then redeploy:
 
 ```text
@@ -188,4 +190,4 @@ The build also accepts `SUPABASE_URL` and `SUPABASE_ANON_KEY` for existing Verce
 
 ## 📜 License
 
-Distributed under the [MIT License](file:///c:/Users/user/Documents/AI%20camp/LICENSE).
+Distributed under the [MIT License](file:///c:/Users/user/Documents/AI camp/LICENSE).

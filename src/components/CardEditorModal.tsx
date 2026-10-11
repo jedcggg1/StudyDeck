@@ -170,7 +170,7 @@ export const CardEditorModal: React.FC<CardEditorModalProps> = ({
                 <textarea
                   rows={5}
                   required
-                  placeholder="### Solution&#10;$$\int x^2 dx = \frac{x^3}{3} + C$$&#10;*Explanation in English or ภาษาไทย*"
+                  placeholder="### Solution&#10;$$\int x^2 dx = \frac{x^3}{3} + C$$&#10;*Explanation in English or Thai*"
                   value={back}
                   onChange={(e) => setBack(e.target.value)}
                   className="brutal-input font-mono text-sm leading-relaxed"

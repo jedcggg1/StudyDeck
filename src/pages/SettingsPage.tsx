@@ -118,7 +118,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-xs font-black uppercase tracking-wider text-zinc-700 mb-1">
-              {t('Language (ภาษา)')}
+              {t('Language')}
             </label>
             <select
               value={settings.language}

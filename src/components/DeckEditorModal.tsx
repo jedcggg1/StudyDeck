@@ -157,7 +157,7 @@ export const DeckEditorModal: React.FC<DeckEditorModalProps> = ({
 
           <div>
             <label className="block text-xs font-black uppercase tracking-wider text-zinc-700 mb-1">
-              {t('Description (English or ภาษาไทย)')}
+              {t('Description (English or Thai)')}
             </label>
             <textarea
               rows={2}

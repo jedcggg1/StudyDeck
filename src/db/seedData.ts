@@ -12,7 +12,7 @@ export const SAMPLE_DECKS: Deck[] = [
   {
     id: 'deck-calculus',
     title: 'Calculus',
-    description: 'Essential derivatives, integrals, limits, and multivariable theorems (แคลคูลัสและการประยุกต์)',
+    description: 'Essential derivatives, integrals, limits, and multivariable theorems (แคลคูลัสและการประยุกต์ใช้)',
     icon: 'sigma',
     color: '#1769FF', // Electric blue
     tags: ['Math', 'Calculus', 'STEM'],
@@ -54,7 +54,7 @@ $$\\int x^2 \\, dx = \\frac{x^3}{3} + C$$
 
 *Key Concept:*
 - Use the power rule for integration: $\\int x^n \\, dx = \\frac{x^{n+1}}{n+1} + C$ for $n \\neq -1$.
-- Don't forget the arbitrary constant of integration $C$ (ค่าคงตัวของการอินทิเกรต).`,
+- Don't forget the arbitrary constant of integration $C$ (ค่าคงที่ของการอินทิเกรต).`,
     tags: ['Integration', 'Power-Rule'],
     repetition: 2,
     interval: 6,
@@ -73,8 +73,8 @@ $$g(x) = \\int_a^x f(t) \\, dt$$`,
     back: `### Derivative of an Accumulation Function
 $$g'(x) = \\frac{d}{dx} \\left[ \\int_a^x f(t) \\, dt \\right] = f(x)$$
 
-**Explanation (ภาษาไทย):**
-ทฤษฎีบทมูลฐานของแคลคูลัสเชื่อมโยงอนุพันธ์กับการอินทิเกรต โดยอนุพันธ์ของฟังก์ชันสะสมพื้นที่คือตัวฟังก์ชันเดิม $f(x)$`,
+**คำอธิบาย (ภาษาไทย):**
+ทฤษฎีบทมูลฐานของแคลคูลัสเชื่อมโยงอนุพันธ์เข้ากับอินทิกรัล โดยอนุพันธ์ของฟังก์ชันสะสมพื้นที่คือฟังก์ชันเดิม $f(x)$`,
     tags: ['Theorems', 'FTC'],
     repetition: 1,
     interval: 1,
@@ -95,7 +95,7 @@ $$\\lim_{x \\to 0} \\frac{\\sin x}{x} = 1$$
 
 *Notes:*
 - Essential for deriving $\\frac{d}{dx}[\\sin x] = \\cos x$.
-- Proven geometrically using the Squeeze Theorem (ทฤษฎีการประกบ).`,
+- Proven geometrically using the Squeeze Theorem (ทฤษฎีบทบีบอัด).`,
     tags: ['Limits', 'Trigonometry'],
     repetition: 3,
     interval: 15,
@@ -136,9 +136,9 @@ Identify each variable and standard SI units.`,
     back: `### Variables & Constants
 $$PV = nRT$$
 
-- $P$: Pressure (ความดัน, Pa or atm)
-- $V$: Volume (ปริมาตร, $m^3$ or $L$)
-- $n$: Amount of substance (จำนวนโมล, mol)
+- $P$: Pressure (ความดัน หน่วย Pa หรือ atm)
+- $V$: Volume (ปริมาตร หน่วย $m^3$ หรือ $L$)
+- $n$: Amount of substance (ปริมาณสาร หน่วย mol)
 - $R$: Ideal Gas Constant ($8.314 \\, \\text{J}/(\\text{mol}\\cdot\\text{K})$ or $0.08206 \\, \\text{L}\\cdot\\text{atm}/(\\text{mol}\\cdot\\text{K})$)
 - $T$: Absolute temperature in Kelvin ($T_{\\text{K}} = T_{\\text{C}} + 273.15$)`,
     tags: ['Thermodynamics', 'Gases'],
@@ -159,9 +159,9 @@ $$\\text{H}_2\\text{O}$$`,
     back: `### Bent Geometry
 - Central atom: Oxygen (O) with **2 bonding pairs** and **2 lone pairs**.
 - Electron geometry: **Tetrahedral**
-- Molecular geometry: **Bent (รูปตัว V)**
+- Molecular geometry: **Bent (โครงสร้างงอรูปตัว V)**
 - Bond angle: approximately **$104.5^\\circ$** (compressed from $109.5^\\circ$ due to lone pair repulsion).
-- Strong **Hydrogen bonding** capability (พันธะไฮโดรเจน).`,
+- Strong **Hydrogen bonding** capability (สร้างพันธะไฮโดรเจนได้ดี).`,
     tags: ['Lewis', 'MolecularGeometry'],
     repetition: 1,
     interval: 1,
@@ -180,9 +180,9 @@ What formula relates spontaneity ($\\Delta G$) with enthalpy ($\\Delta H$) and e
 $$\\Delta G = \\Delta H - T\\Delta S$$
 
 **Spontaneity Criteria:**
-- $\\Delta G < 0$: Spontaneous process (เกิดขึ้นเองได้)
+- $\\Delta G < 0$: Spontaneous process (กระบวนการเกิดขึ้นได้เอง)
 - $\\Delta G = 0$: Dynamic equilibrium (สมดุลเคมี)
-- $\\Delta G > 0$: Non-spontaneous (ต้องใส่พลังงาน)`,
+- $\\Delta G > 0$: Non-spontaneous (ต้องใช้พลังงาน)`,
     tags: ['Thermodynamics', 'Equilibrium'],
     repetition: 2,
     interval: 6,
@@ -206,7 +206,7 @@ $$\\vec{F}_{\\text{net}} = m \\cdot \\vec{a} = \\frac{d\\vec{p}}{dt}$$
 **Key Points:**
 - Net force $\\vec{F}$ is directly proportional to acceleration $\\vec{a}$ and mass $m$.
 - SI Unit of force: $1 \\, \\text{Newton (N)} = 1 \\, \\text{kg}\\cdot\\text{m}/\\text{s}^2$.
-- In terms of momentum $\\vec{p}$: Force is the rate of change of momentum (กฎการเคลื่อนที่ข้อที่ 2 ของนิวตัน).`,
+- In terms of momentum $\\vec{p}$: Force is the rate of change of momentum (แรงคืออัตราการเปลี่ยนแปลงของโมเมนตัม ตามกฎการเคลื่อนที่ข้อที่ 2 ของนิวตัน).`,
     tags: ['Mechanics', 'Newton'],
     repetition: 1,
     interval: 1,
@@ -247,7 +247,7 @@ $$E_0 = m c^2$$
 - $c \\approx 3 \\times 10^8 \\, \\text{m/s}$ (Speed of light in vacuum)
 - For a moving particle with momentum $p$:
 $$E^2 = (pc)^2 + (m c^2)^2$$
-- Converted in nuclear fission and fusion (ปฏิกิริยานิวเคลียร์ฟิชชันและฟิวชัน)`,
+- Converted in nuclear fission and fusion (ฟิชชันและฟิวชันนิวเคลียร์)`,
     tags: ['Relativity', 'ModernPhysics'],
     repetition: 3,
     interval: 14,

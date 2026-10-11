@@ -52,7 +52,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ isOpen, onComp
               {t('📐 Pre-loaded STEM Decks')}
             </p>
             <p className="text-xs text-zinc-700 mt-1">
-              We have pre-loaded comprehensive starter decks for <strong>Calculus</strong>, <strong>Chemistry</strong>, and <strong>Physics</strong> with both English and Thai explanations!
+              We have pre-loaded comprehensive starter decks for <strong>Calculus</strong>, <strong>Chemistry</strong>, and <strong>Physics</strong> with explanations in both English and Thai.
             </p>
           </div>
         </div>
