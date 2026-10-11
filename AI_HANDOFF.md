@@ -9,7 +9,7 @@
 - โปรเจกต์อยู่ที่ C:\Users\user\Documents\AI camp
 - Git remote: https://github.com/jedcggg1/StudyDeck.git
 - branch ปัจจุบัน: main
-- commit ล่าสุด: 9dab604 Move auth logo beside the welcome heading (push ขึ้น GitHub แล้ว และ Vercel deploy แล้ว)
+- commit ล่าสุด: 66fae1c Fix invisible borders and text in dark mode (push ขึ้น GitHub แล้ว และ Vercel deploy แล้ว)
 - working tree สะอาด ไม่มีไฟล์ค้าง commit
 - สิ่งที่เข้า commit 53313cf + 9dab604: แก้ logo หน้า login (อยู่ขวาของข้อความ, โปร่งใส ไม่มีกล่องพื้นหลัง), แก้ UI เลื่อนแนวนอน (overscroll-behavior-x บน html/body), เพิ่ม .env.example, public/robots.txt, vitest.config.ts, AI_HANDOFF.md, README แก้ลิงก์, presentation assets, skills-lock.json
 - โดเมน Vercel: https://study-deck-opal.vercel.app — ตรวจ manifest บนโดเมนจริงแล้ว ได้ /logo-192.png และ /logo-512.png ถูกต้อง (11 ต.ค. 2026)
