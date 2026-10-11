@@ -36,7 +36,7 @@ export const BentoStats: React.FC<BentoStatsProps> = ({
         <div className="p-4 sm:p-5 flex flex-col justify-between">
           <div className="flex items-center gap-2 text-[#555555]">
             <Layers className="w-4 h-4 text-[#111111]" />
-            <span className="text-xs font-bold uppercase tracking-wider text-[#333333]">{t('Total Decks')}</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">{t('Total Decks')}</span>
           </div>
           <div className="mt-3">
             <span className="text-3xl sm:text-4xl font-black text-[#111111]">{totalDecks}</span>
@@ -47,7 +47,7 @@ export const BentoStats: React.FC<BentoStatsProps> = ({
         <div className="p-4 sm:p-5 flex flex-col justify-between">
           <div className="flex items-center gap-2 text-[#555555]">
             <BookOpen className="w-4 h-4 text-[#111111]" />
-            <span className="text-xs font-bold uppercase tracking-wider text-[#333333]">{t('Total Cards')}</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">{t('Total Cards')}</span>
           </div>
           <div className="mt-3">
             <span className="text-3xl sm:text-4xl font-black text-[#111111]">{totalCards}</span>
@@ -58,11 +58,11 @@ export const BentoStats: React.FC<BentoStatsProps> = ({
         <div className="p-4 sm:p-5 flex flex-col justify-between">
           <div className="flex items-center gap-2 text-[#555555]">
             <CheckCircle className="w-4 h-4 text-[#12A05C]" />
-            <span className="text-xs font-bold uppercase tracking-wider text-[#333333]">{t('Cards Studied')}</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">{t('Cards Studied')}</span>
           </div>
           <div className="mt-3 flex items-baseline gap-1.5">
             <span className="text-3xl sm:text-4xl font-black text-[#12A05C]">{studiedToday}</span>
-            <span className="text-xs font-bold text-zinc-500">{t('today')}</span>
+            <span className="text-xs font-bold text-[var(--text-muted)]">{t('today')}</span>
           </div>
         </div>
 
@@ -70,11 +70,11 @@ export const BentoStats: React.FC<BentoStatsProps> = ({
         <div className="p-4 sm:p-5 flex flex-col justify-between">
           <div className="flex items-center gap-2 text-[#555555]">
             <Flame className="w-4 h-4 text-[#FF922B]" />
-            <span className="text-xs font-bold uppercase tracking-wider text-[#333333]">{t('Streak')}</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">{t('Streak')}</span>
           </div>
           <div className="mt-3 flex items-baseline gap-1.5">
             <span className="text-3xl sm:text-4xl font-black text-[#FF922B]">{streakDays}</span>
-            <span className="text-xs font-bold text-zinc-600">{t('days')}</span>
+            <span className="text-xs font-bold text-[var(--text-muted)]">{t('days')}</span>
           </div>
         </div>
       </div>
