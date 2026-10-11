@@ -26,7 +26,7 @@ export default defineConfig(({ mode }) => {
       react(),
       VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['logo.svg', 'robots.txt'],
+      includeAssets: ['logo.png', 'robots.txt'],
       manifest: {
         name: 'StudyDeck — Spaced Repetition Flashcards',
         short_name: 'StudyDeck',
