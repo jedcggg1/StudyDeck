@@ -9,8 +9,9 @@
 - โปรเจกต์อยู่ที่ C:\Users\user\Documents\AI camp
 - Git remote: https://github.com/jedcggg1/StudyDeck.git
 - branch ปัจจุบัน: main
-- commit ล่าสุด: 7576e71 Fix PWA manifest icons (push ขึ้น GitHub แล้ว และ Vercel deploy แล้ว)
-- สถานะล่าสุด: มีไฟล์แก้ไขค้าง commit ฝั่ง local ยังไม่ได้ commit ดูรายการที่หัวข้อ "สิ่งที่เพิ่ม/แก้ใหม่" ท้ายไฟล์
+- commit ล่าสุด: 9dab604 Move auth logo beside the welcome heading (push ขึ้น GitHub แล้ว และ Vercel deploy แล้ว)
+- working tree สะอาด ไม่มีไฟล์ค้าง commit
+- สิ่งที่เข้า commit 53313cf + 9dab604: แก้ logo หน้า login (อยู่ขวาของข้อความ, โปร่งใส ไม่มีกล่องพื้นหลัง), แก้ UI เลื่อนแนวนอน (overscroll-behavior-x บน html/body), เพิ่ม .env.example, public/robots.txt, vitest.config.ts, AI_HANDOFF.md, README แก้ลิงก์, presentation assets, skills-lock.json
 - โดเมน Vercel: https://study-deck-opal.vercel.app — ตรวจ manifest บนโดเมนจริงแล้ว ได้ /logo-192.png และ /logo-512.png ถูกต้อง (11 ต.ค. 2026)
 
 ห้ามใช้ git push --force เพราะ repository นี้มี commit จาก remote อยู่แล้ว ถ้า push ไม่ผ่านให้ใช้ git pull --rebase origin main ก่อน
@@ -304,14 +305,13 @@ git push origin main
 
 ถ้าจะทำ APK แบบ PWA/TWA และใช้แค่ email/password อาจต่อยอดได้ง่ายกว่า OAuth แต่ถ้าจะใช้ Google OAuth, magic link หรือ reset password ต้องตั้ง redirect URL และ deep link ให้สอดคล้องกับ Android package ก่อน
 
-## สิ่งที่เพิ่ม/แก้ใหม่ ยังไม่ได้ commit (11 ต.ค. 2026)
+## หมายเหตุสำคัญหลัง commit 53313cf / 9dab604 (11 ต.ค. 2026)
 
-- สร้างใหม่: .env.example, public/robots.txt, vitest.config.ts
-- แก้ไข: README.md (ลิงก์ logo และลิงก์ไฟล์)
-- เปลี่ยนแปลง: skills-lock.json (เพิ่ม entries จากการติดตั้ง skill ด้วย npx skills add)
 - vitest.config.ts สำคัญ: จำกัด test ให้วิ่งเฉพาะ src/**/*.test.ts ถ้าลบไฟล์นี้ npm test จะไปวิ่ง test suite ของ skill ที่ติดตั้งอยู่ใน .agents/skills แล้วค้างและพัง
-- skill ที่ติดตั้งใหม่ใน .agents/skills: mattpocock/skills ชุดเต็ม, archify, modern-web-guidance, ui-skills-root, kien-thai, ponytail และชุดเสริมของแต่ละ repo
-- .agents กับ .cursor ถูก ignore แล้ว ส่วน .claude ยังไม่อยู่ใน .gitignore
+- skill ที่ติดตั้งใน .agents/skills (ไม่ commit, อยู่ใน .gitignore): mattpocock/skills ชุดเต็ม, archify, modern-web-guidance, ui-skills-root, kien-thai, ponytail และชุดเสริมของแต่ละ repo
+- .gitignore มี .agents, .cursor, .claude, presentation/node_modules แล้ว
+- presentation/ มีสคริปต์ generate.js (pptxgenjs) สร้างสไลด์ pptx + สไลด์ markdown ขายของ รัน `node presentation/generate.js` เพื่อสร้างใหม่
+- หน้า login: logo.png อยู่ขวาของ heading โปร่งใส (object-contain) ไม่มีกล่องพื้นหลัง
 
 ## กฎสำหรับ AI ตัวถัดไป
 
