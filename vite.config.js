@@ -23,10 +23,13 @@ export default defineConfig(({ mode }) => {
             react(),
             VitePWA({
             registerType: 'autoUpdate',
-            includeAssets: ['logo.svg', 'robots.txt'],
+            includeAssets: ['logo.png', 'robots.txt'],
             manifest: {
                 name: 'StudyDeck — Spaced Repetition Flashcards',
                 short_name: 'StudyDeck',
+                id: '/',
+                start_url: '/',
+                scope: '/',
                 description: 'Advanced Offline-First Flashcard Application powered by SM-2 algorithm & KaTeX',
                 theme_color: '#F8F7F2',
                 background_color: '#F8F7F2',
@@ -34,9 +37,15 @@ export default defineConfig(({ mode }) => {
                 orientation: 'portrait-primary',
                 icons: [
                     {
-                        src: '/logo.svg',
-                        sizes: '192x192 512x512',
-                        type: 'image/svg+xml',
+                        src: '/logo-192.png',
+                        sizes: '192x192',
+                        type: 'image/png',
+                        purpose: 'any maskable'
+                    },
+                    {
+                        src: '/logo-512.png',
+                        sizes: '512x512',
+                        type: 'image/png',
                         purpose: 'any maskable'
                     }
                 ]
