@@ -156,7 +156,18 @@ export const CardEditorModal: React.FC<CardEditorModalProps> = ({
               setFormulaCategory(tmpl.category);
             }}
             onAddCategory={onAddCategory}
-            onDeleteCategory={onDeleteCategory}
+            onDeleteCategory={(name) => {
+              onDeleteCategory(name);
+              // If the deleted category was selected, jump to the first remaining one
+              if (formulaCategory === name) {
+                const builtin = ['Math', 'Physics', 'Chemistry', 'Markdown'];
+                const remaining = [...getAllTemplates(customFormulas)]
+                  .map((f) => f.category)
+                  .filter((c, i, arr) => arr.indexOf(c) === i && c !== name)
+                  .concat(customCategories.filter((c) => c !== name));
+                setFormulaCategory(remaining[0] ?? builtin[0]);
+              }
+            }}
             onOpenAddForm={() => setIsAddFormulaOpen((v) => !v)}
             isAddFormOpen={isAddFormulaOpen}
             target={snippetTarget}
