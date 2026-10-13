@@ -9,8 +9,8 @@
 - โปรเจกต์อยู่ที่ C:\Users\user\Documents\AI camp
 - Git remote: https://github.com/jedcggg1/StudyDeck.git
 - branch ปัจจุบัน: main
-- commit ล่าสุด: ae88e9f Fix invisible Study Stats labels in dark mode (push ขึ้น GitHub แล้ว และ Vercel deploy แล้ว)
-- working tree สะอาด ไม่มีไฟล์ค้าง commit
+- commit ล่าสุด: d4a7b82 Add categorized LaTeX formula picker with user-defined formulas and live auto-preview editor (push ขึ้น GitHub แล้ว และ Vercel deploy แล้ว)
+- working tree มีไฟล์งานอื่นค้างอยู่ (AuthScreen, Dashboard, StudySession, studyStats.*) ไม่ใช่ของ commit นี้ อย่าลบหรือ commit โดยไม่เช็ค
 - สิ่งที่เข้า commit 53313cf + 9dab604: แก้ logo หน้า login (อยู่ขวาของข้อความ, โปร่งใส ไม่มีกล่องพื้นหลัง), แก้ UI เลื่อนแนวนอน (overscroll-behavior-x บน html/body), เพิ่ม .env.example, public/robots.txt, vitest.config.ts, AI_HANDOFF.md, README แก้ลิงก์, presentation assets, skills-lock.json
 - โดเมน Vercel: https://study-deck-opal.vercel.app — ตรวจ manifest บนโดเมนจริงแล้ว ได้ /logo-192.png และ /logo-512.png ถูกต้อง (11 ต.ค. 2026)
 
