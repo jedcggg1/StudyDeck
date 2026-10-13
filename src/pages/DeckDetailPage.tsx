@@ -204,14 +204,14 @@ export const DeckDetailPage: React.FC<DeckDetailPageProps> = ({
                   <div className="flex items-center gap-1.5">
                     <button
                       onClick={() => onEditCard(card)}
-                      className="p-1.5 bg-white border border-black rounded hover:bg-zinc-100 shadow-[1px_1px_0px_#000]"
+                      className="p-1.5 bg-white border border-black rounded hover:bg-[#1769FF] hover:text-white hover:-translate-y-0.5 hover:shadow-[2px_2px_0px_#000] transition-all shadow-[1px_1px_0px_#000]"
                       title={t('Edit Flashcard')}
                     >
                       <Edit className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => setPendingCardDelete({ id: card.id, front: card.front })}
-                      className="p-1.5 bg-white text-red-600 border border-black rounded hover:bg-red-50 shadow-[1px_1px_0px_#000]"
+                      className="p-1.5 bg-white text-red-600 border border-black rounded hover:bg-[#FA5252] hover:text-white hover:-translate-y-0.5 hover:shadow-[2px_2px_0px_#000] transition-all shadow-[1px_1px_0px_#000]"
                       title={t('Delete Flashcard')}
                     >
                       <Trash2 className="w-4 h-4" />

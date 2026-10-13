@@ -109,7 +109,7 @@ export const FormulaPicker: React.FC<FormulaPickerProps> = ({
                 className={`px-2 py-0.5 rounded text-[11px] font-black border transition-colors ${
                   cat === activeCategory
                     ? 'bg-[#1769FF] text-white border-[#111111] shadow-[1.5px_1.5px_0px_#111111]'
-                    : 'bg-white text-zinc-800 border-[#111111] shadow-[1px_1px_0px_#111111] hover:bg-zinc-100'
+                    : 'bg-white text-zinc-800 border-[#111111] shadow-[1px_1px_0px_#111111] hover:bg-zinc-100 hover:-translate-y-0.5 hover:shadow-[2.5px_2.5px_0px_#111111] transition-all'
                 }`}
               >
                 {CATEGORY_ICON[cat] ? `${CATEGORY_ICON[cat]} ` : ''}{cat}
@@ -161,7 +161,7 @@ export const FormulaPicker: React.FC<FormulaPickerProps> = ({
           <button
             type="button"
             onClick={() => setIsAddCatOpen(true)}
-            className="px-2 py-0.5 rounded text-[11px] font-black border border-[#111111] bg-white text-zinc-800 shadow-[1px_1px_0px_#111111] hover:bg-zinc-100"
+            className="px-2 py-0.5 rounded text-[11px] font-black border border-[#111111] bg-white text-zinc-800 shadow-[1px_1px_0px_#111111] hover:bg-zinc-100 hover:-translate-y-0.5 hover:shadow-[2.5px_2.5px_0px_#111111] transition-all"
           >
             + {t('Add Category')}
           </button>
@@ -174,7 +174,7 @@ export const FormulaPicker: React.FC<FormulaPickerProps> = ({
           className={`px-2 py-0.5 rounded text-[11px] font-black border transition-colors ml-auto ${
             isAddFormOpen
               ? 'bg-[#12A05C] text-white border-[#111111] shadow-[1.5px_1.5px_0px_#111111]'
-              : 'bg-white text-zinc-800 border-[#111111] shadow-[1px_1px_0px_#111111] hover:bg-zinc-100'
+              : 'bg-white text-zinc-800 border-[#111111] shadow-[1px_1px_0px_#111111] hover:bg-zinc-100 hover:-translate-y-0.5 hover:shadow-[2.5px_2.5px_0px_#111111] transition-all'
           }`}
         >
           {isAddFormOpen ? `− ${t('Close')}` : `+ ${t('Add Formula')}`}
@@ -209,7 +209,7 @@ export const FormulaPicker: React.FC<FormulaPickerProps> = ({
                   target === 'front' ? t('Front') : t('Back (Solution)')
                 }`}
                 onClick={() => onInsert(tmpl.code)}
-                className={`px-2 py-1 bg-white border rounded text-[11px] font-bold text-zinc-800 hover:bg-zinc-100 ${
+                className={`px-2 py-1 bg-white border rounded text-[11px] font-bold text-zinc-800 hover:bg-zinc-100 hover:-translate-y-0.5 hover:shadow-[2.5px_2.5px_0px_#111111] transition-all ${
                   tmpl.isCustom ? 'border-[#12A05C]' : 'border-[#111111]'
                 } shadow-[1px_1px_0px_#111111]${tmpl.isCustom ? ' shadow-[1px_1px_0px_#12A05C]' : ''}`}
               >

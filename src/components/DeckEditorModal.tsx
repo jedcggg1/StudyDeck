@@ -135,7 +135,7 @@ export const DeckEditorModal: React.FC<DeckEditorModalProps> = ({
           </h3>
           <button
             onClick={onClose}
-            className="w-8 h-8 bg-white border border-[#111111] rounded flex items-center justify-center text-black shadow-[2px_2px_0px_#111111] hover:bg-zinc-100"
+            className="w-8 h-8 bg-white border border-[#111111] rounded flex items-center justify-center text-black shadow-[2px_2px_0px_#111111] hover:bg-[#FA5252] hover:text-white hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_#111111] transition-all"
           >
             <X className="w-5 h-5" />
           </button>

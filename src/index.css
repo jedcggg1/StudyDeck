@@ -112,7 +112,20 @@ select:focus-visible {
   border: var(--border-width) solid var(--border-color);
   box-shadow: var(--shadow-offset) var(--shadow-offset) 0px var(--shadow-color);
   border-radius: 6px;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+
+/* Hover polish: only real hover devices get lift effects (avoids sticky
+   hover state on touch screens where the last tapped element stays "hovered") */
+@media (hover: hover) and (pointer: fine) {
+  [class~="cursor-pointer"]:hover,
+  .brutal-card-hover:hover {
+    will-change: transform;
+  }
+
+  .brutal-card[class~="cursor-pointer"]:hover {
+    border-color: var(--electric-blue);
+  }
 }
 
 .brutal-card-hover:hover {

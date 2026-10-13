@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import confetti from 'canvas-confetti';
 import {
   ArrowLeft,
@@ -38,6 +38,9 @@ export const StudySession: React.FC<StudySessionProps> = ({
   const [isRevealed, setIsRevealed] = useState(false);
   const [sessionCompleted, setSessionCompleted] = useState(false);
   const [soundOn, setSoundOn] = useState(soundEnabled);
+  const [isSavingReview, setIsSavingReview] = useState(false);
+  const [reviewError, setReviewError] = useState<string | null>(null);
+  const ratingInProgress = useRef(false);
   const [sessionStats, setSessionStats] = useState<{
     again: number;
     hard: number;
@@ -65,38 +68,49 @@ export const StudySession: React.FC<StudySessionProps> = ({
   // Process rating
   const handleRate = useCallback(
     async (rating: StudyRating) => {
-      if (!currentCard) return;
+      if (!currentCard || ratingInProgress.current) return;
 
-      if (rating === 'again') {
-        playFail();
-      } else {
-        playClick();
-      }
-
-      setSessionStats((prev) => ({ ...prev, [rating]: prev[rating] + 1 }));
-
-      // Record in Dexie database
-      await onRecordReview(currentCard, rating);
-
-      // Check if session completed
-      if (currentIndex + 1 >= cardsToReview.length) {
-        setSessionCompleted(true);
-        playSuccess();
+      ratingInProgress.current = true;
+      setIsSavingReview(true);
+      setReviewError(null);
+      try {
         try {
-          confetti({
-            particleCount: 80,
-            spread: 70,
-            origin: { y: 0.6 }
-          });
-        } catch {
-          // ignore if canvas not supported
+          await onRecordReview(currentCard, rating);
+        } catch (error) {
+          console.error('Failed to save study review:', error);
+          setReviewError(t('Could not save this review. Please try again.'));
+          return;
         }
-      } else {
-        setCurrentIndex((prev) => prev + 1);
-        setIsRevealed(false);
+
+        if (rating === 'again') playFail();
+        else playClick();
+        setSessionStats((prev) => ({ ...prev, [rating]: prev[rating] + 1 }));
+
+        if (currentIndex + 1 >= cardsToReview.length) {
+          setSessionCompleted(true);
+          playSuccess();
+          try {
+            confetti({
+              particleCount: 80,
+              spread: 70,
+              origin: { y: 0.6 }
+            });
+          } catch {
+            // ignore if canvas not supported
+          }
+        } else {
+          setCurrentIndex((prev) => prev + 1);
+          setIsRevealed(false);
+        }
+      } catch (error) {
+        console.error('Failed to save study review:', error);
+        setReviewError(t('Could not save this review. Please try again.'));
+      } finally {
+        ratingInProgress.current = false;
+        setIsSavingReview(false);
       }
     },
-    [currentCard, currentIndex, cardsToReview.length, onRecordReview, playClick, playFail, playSuccess]
+    [currentCard, currentIndex, cardsToReview.length, onRecordReview, playClick, playFail, playSuccess, t]
   );
 
   // Keyboard navigation: Space to reveal, 1-4 to rate
@@ -230,7 +244,7 @@ export const StudySession: React.FC<StudySessionProps> = ({
           </span>
           <button
             onClick={() => setSoundOn(!soundOn)}
-            className="p-1.5 bg-white border border-black rounded shadow-[1px_1px_0px_#111] hover:bg-zinc-100"
+            className="p-1.5 bg-white border border-black rounded shadow-[1px_1px_0px_#111] hover:bg-zinc-100 hover:-translate-y-0.5 hover:shadow-[2px_2px_0px_#111] transition-all"
             title={soundOn ? t('Disable Sound') : t('Enable Sound')}
           >
             {soundOn ? <Volume2 className="w-4 h-4 text-zinc-700" /> : <VolumeX className="w-4 h-4 text-zinc-400" />}
@@ -303,9 +317,20 @@ export const StudySession: React.FC<StudySessionProps> = ({
           ) : (
             /* SM-2 4-Rating Buttons (Matches Reference Image 1) */
             <div className="space-y-2">
+              {reviewError && (
+                <p role="alert" className="text-sm font-bold text-red-700">
+                  {reviewError}
+                </p>
+              )}
+              {isSavingReview && (
+                <p role="status" className="text-sm font-bold text-zinc-600">
+                  {t('Saving review...')}
+                </p>
+              )}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                 {/* 1: Again */}
                 <button
+                  disabled={isSavingReview}
                   onClick={() => handleRate('again')}
                   className="brutal-btn !bg-[#FF6B6B] !text-black !border-black hover:!bg-[#FA5252] flex flex-col items-center !py-2.5 shadow-[3px_3px_0px_#111111]"
                 >
@@ -318,6 +343,7 @@ export const StudySession: React.FC<StudySessionProps> = ({
 
                 {/* 2: Hard */}
                 <button
+                  disabled={isSavingReview}
                   onClick={() => handleRate('hard')}
                   className="brutal-btn !bg-[#FF922B] !text-black !border-black hover:!bg-[#F76707] flex flex-col items-center !py-2.5 shadow-[3px_3px_0px_#111111]"
                 >
@@ -330,6 +356,7 @@ export const StudySession: React.FC<StudySessionProps> = ({
 
                 {/* 3: Good */}
                 <button
+                  disabled={isSavingReview}
                   onClick={() => handleRate('good')}
                   className="brutal-btn !bg-[#A9E34B] !text-black !border-black hover:!bg-[#94D82D] flex flex-col items-center !py-2.5 shadow-[3px_3px_0px_#111111]"
                 >
@@ -342,6 +369,7 @@ export const StudySession: React.FC<StudySessionProps> = ({
 
                 {/* 4: Easy */}
                 <button
+                  disabled={isSavingReview}
                   onClick={() => handleRate('easy')}
                   className="brutal-btn !bg-[#51CF66] !text-black !border-black hover:!bg-[#40C057] flex flex-col items-center !py-2.5 shadow-[3px_3px_0px_#111111]"
                 >

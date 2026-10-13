@@ -1,6 +1,6 @@
 import React from 'react';
 import { Plus, Download, AlertCircle } from 'lucide-react';
-import { Deck, Flashcard } from '../types';
+import { Deck, Flashcard, ReviewLog } from '../types';
 import { OfflineBanner } from '../components/OfflineBanner';
 import { BentoStats } from '../components/BentoStats';
 import { CardsDueList } from '../components/CardsDueList';
@@ -8,10 +8,12 @@ import { DeckSummaryCard } from '../components/DeckSummaryCard';
 import { isCardDue } from '../services/sm2';
 import { MathMarkdown } from '../components/MathMarkdown';
 import { useTranslation } from '../i18n';
+import { calculateStudyStreak } from '../services/studyStats';
 
 interface DashboardProps {
   decks: Deck[];
   cards: Flashcard[];
+  reviewLogs: ReviewLog[];
   searchQuery: string;
   onNavigate: (page: any) => void;
   onStartStudy: (deckId?: string) => void;
@@ -23,6 +25,7 @@ interface DashboardProps {
 export const Dashboard: React.FC<DashboardProps> = ({
   decks,
   cards,
+  reviewLogs,
   searchQuery,
   onNavigate,
   onStartStudy,
@@ -42,18 +45,16 @@ export const Dashboard: React.FC<DashboardProps> = ({
   // Calculate real study statistics
   const todayStart = new Date();
   todayStart.setHours(0, 0, 0, 0);
+  const todayStartMs = todayStart.getTime();
 
   const cardsReviewedToday = React.useMemo(() => {
-    return cards.filter(
-      (c) => c.lastReviewedAt && c.lastReviewedAt >= todayStart.getTime()
-    ).length;
-  }, [cards, todayStart]);
-
-  // Calculate streak: check consecutive days with reviews
-  const studyStreak = React.useMemo(() => {
-    // If cards were reviewed today, minimum streak is 1, otherwise calculate from history
-    return cardsReviewedToday > 0 ? 2 : 1;
-  }, [cardsReviewedToday]);
+    return new Set(
+      reviewLogs
+        .filter((log) => log.reviewedAt >= todayStartMs)
+        .map((log) => log.cardId)
+    ).size;
+  }, [reviewLogs, todayStartMs]);
+  const studyStreak = calculateStudyStreak(reviewLogs);
 
   // Filtered search results if user searched from Navbar
   const searchResults = React.useMemo(() => {
@@ -141,7 +142,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                 <div
                   key={deck.id}
                   onClick={() => onOpenDeck(deck.id)}
-                  className="brutal-card p-4 cursor-pointer hover:-translate-y-1 transition-all bg-white"
+                  className="brutal-card p-4 cursor-pointer hover:-translate-y-1 hover:shadow-[6px_6px_0px_#111111] hover:border-[#1769FF] transition-all bg-white"
                 >
                   <div className="flex items-center gap-2 mb-2">
                     <span
@@ -170,7 +171,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                   <div
                     key={card.id}
                     onClick={() => onStartStudy(card.deckId)}
-                    className="brutal-card p-4 cursor-pointer hover:-translate-y-1 transition-all bg-white flex flex-col justify-between"
+                    className="brutal-card p-4 cursor-pointer hover:-translate-y-1 hover:shadow-[6px_6px_0px_#111111] hover:border-[#1769FF] transition-all bg-white flex flex-col justify-between"
                   >
                     <div>
                       <div className="flex items-center gap-2 mb-1.5">
