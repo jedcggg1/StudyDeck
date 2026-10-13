@@ -188,9 +188,9 @@ export const FormulaPicker: React.FC<FormulaPickerProps> = ({
         />
       )}
 
-      {/* Token chips with hover preview (auto-rendered) */}
+      {/* Token chips with hover preview (auto-rendered) — divider line separates categories row from formulas */}
       {!isAddFormOpen && (
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-1.5 border-t-2 border-[#111111] pt-2 mt-1">
           {visible.length === 0 && (
             <span className="text-[11px] font-semibold text-zinc-500">
               {t('No formulas in this category yet.')} {t('Use "+ Add Formula" to add one.')}
