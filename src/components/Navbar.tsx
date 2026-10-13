@@ -26,6 +26,13 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const isOnline = useNetworkStatus();
   const { t } = useTranslation();
+  const [isSearchExpanded, setIsSearchExpanded] = React.useState(false);
+  const searchInputRef = React.useRef<HTMLInputElement>(null);
+
+  // Mobile: expanding the search button focuses the full-width input
+  React.useEffect(() => {
+    if (isSearchExpanded) searchInputRef.current?.focus();
+  }, [isSearchExpanded]);
 
   return (
     <header className="sticky top-0 z-30 bg-[var(--bg-page)] border-b-[2.5px] border-[var(--border-color)] px-3 py-2.5 sm:px-6 sm:py-3">
@@ -60,18 +67,61 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
         </div>
 
-        {/* Search Bar */}
-        <div className="flex-1 min-w-0 max-w-xl mx-1 sm:mx-6">
+        {/* Search Bar — on mobile starts as an icon button; tapping expands
+            it to full width so the typed text is fully visible */}
+        <div
+          className={`flex-1 min-w-0 max-w-xl mx-1 sm:mx-6 ${
+            isSearchExpanded
+              ? 'absolute left-2 right-2 top-1/2 -translate-y-1/2 z-10 max-w-none bg-[var(--bg-page)]'
+              : ''
+          }`}
+        >
+          {isSearchExpanded && (
+            <button
+              onClick={() => {
+                onSearchChange('');
+                setIsSearchExpanded(false);
+              }}
+              className="sm:hidden absolute right-0 top-1/2 -translate-y-1/2 z-20 brutal-btn bg-white !p-2 !min-w-0"
+              aria-label={t('Close search')}
+              title={t('Close search')}
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
           <div className="relative">
-            <Search className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            {/* Mobile: collapsed state is just an icon button */}
+            {!isSearchExpanded && (
+              <button
+                onClick={() => setIsSearchExpanded(true)}
+                className="sm:hidden brutal-btn bg-white !p-2"
+                aria-label={t('Search decks, cards, or topics...')}
+                title={t('Search decks, cards, or topics...')}
+              >
+                <Search className="w-4 h-4 text-zinc-500" />
+              </button>
+            )}
             <input
+              ref={searchInputRef}
               type="text"
               placeholder={t('Search decks, cards, or topics...')}
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="brutal-input !pl-10 pr-4 py-2 text-xs sm:text-sm bg-white"
+              onKeyDown={(e) => {
+                if (e.key === 'Escape') setIsSearchExpanded(false);
+              }}
+              className={`${
+                isSearchExpanded
+                  ? 'w-full brutal-input !pl-10 pr-10 py-2 text-xs bg-white'
+                  : 'hidden sm:block brutal-input !pl-10 pr-4 py-2 text-xs sm:text-sm bg-white'
+              }`}
             />
-            {searchQuery && (
+            <Search
+              className={`w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none ${
+                isSearchExpanded ? '' : 'hidden sm:block'
+              }`}
+            />
+            {searchQuery && !isSearchExpanded && (
               <button
                 onClick={() => onSearchChange('')}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-zinc-400 hover:text-black"

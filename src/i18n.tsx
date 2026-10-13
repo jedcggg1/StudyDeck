@@ -16,6 +16,7 @@ const THAI_TRANSLATIONS: Record<string, string> = {
   'Learn Better. Offline. Always.': 'เรียนได้ดีขึ้น แม้ออฟไลน์',
   'Toggle navigation menu': 'เปิด/ปิดเมนูนำทาง',
   'Clear search': 'ล้างคำค้นหา',
+  'Close search': 'ปิดการค้นหา',
   'Connected to internet': 'เชื่อมต่ออินเทอร์เน็ตแล้ว',
   'Working offline locally': 'ทำงานออฟไลน์ในเครื่อง',
   'Application Settings': 'ตั้งค่าแอป',
