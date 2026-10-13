@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { db, getOrInitSettings } from './db/database';
 import { seedInitialDataIfEmpty, SAMPLE_DECKS, SAMPLE_CARDS } from './db/seedData';
-import { Deck, Flashcard, ReviewLog, AppSettings, StudyRating } from './types';
+import { Deck, Flashcard, ReviewLog, AppSettings, StudyRating, FormulaTemplate } from './types';
 import { calculateSM2, isCardDue } from './services/sm2';
 import { Navbar } from './components/Navbar';
 import { Sidebar, NavPage } from './components/Sidebar';
@@ -392,6 +392,7 @@ export function App() {
             <Dashboard
               decks={decks}
               cards={cards}
+              reviewLogs={reviewLogs}
               searchQuery={searchQuery}
               onNavigate={setCurrentPage}
               onStartStudy={startStudySession}
@@ -511,6 +512,15 @@ export function App() {
         isOpen={isCardModalOpen}
         deckId={cardModalDeckId}
         cardToEdit={editingCard}
+        customFormulas={settings?.formulaTemplates ?? []}
+        onAddFormula={(tmpl: FormulaTemplate) => {
+          const current = settings?.formulaTemplates ?? [];
+          void handleUpdateSettings({ formulaTemplates: [...current, tmpl] });
+        }}
+        onDeleteFormula={(id: string) => {
+          const current = settings?.formulaTemplates ?? [];
+          void handleUpdateSettings({ formulaTemplates: current.filter((f) => f.id !== id) });
+        }}
         onClose={() => {
           setIsCardModalOpen(false);
           setEditingCard(null);

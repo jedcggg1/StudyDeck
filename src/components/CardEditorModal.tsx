@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { X, Eye, Edit3, Trash2 } from 'lucide-react';
-import { Flashcard } from '../types';
+import { Flashcard, FormulaTemplate } from '../types';
 import { MathMarkdown } from './MathMarkdown';
+import { FormulaPicker } from './FormulaPicker';
+import { getAllTemplates } from '../data/formulaTemplates';
 import { useTranslation } from '../i18n';
 
 interface CardEditorModalProps {
   isOpen: boolean;
   deckId: string;
   cardToEdit?: Flashcard | null;
+  /** User-defined formula templates (from AppSettings) */
+  customFormulas: FormulaTemplate[];
+  onAddFormula: (tmpl: FormulaTemplate) => void;
+  onDeleteFormula: (id: string) => void;
   onClose: () => void;
   onSave: (cardData: Omit<Flashcard, 'id' | 'createdAt' | 'updatedAt' | 'repetition' | 'interval' | 'easeFactor' | 'nextReviewDate'>, cardId?: string) => Promise<void>;
   onDelete?: (id: string) => Promise<void>;
@@ -17,6 +23,9 @@ export const CardEditorModal: React.FC<CardEditorModalProps> = ({
   isOpen,
   deckId,
   cardToEdit,
+  customFormulas,
+  onAddFormula,
+  onDeleteFormula,
   onClose,
   onSave,
   onDelete
@@ -27,6 +36,9 @@ export const CardEditorModal: React.FC<CardEditorModalProps> = ({
   const [tagsInput, setTagsInput] = useState('');
   const [activeTab, setActiveTab] = useState<'edit' | 'preview'>('edit');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formulaCategory, setFormulaCategory] = useState('Math');
+  const [isAddFormulaOpen, setIsAddFormulaOpen] = useState(false);
+  const [snippetTarget, setSnippetTarget] = useState<'front' | 'back'>('front');
 
   useEffect(() => {
     if (cardToEdit) {
@@ -78,14 +90,14 @@ export const CardEditorModal: React.FC<CardEditorModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-      <div className="brutal-card bg-white w-full max-w-2xl overflow-hidden max-h-[92vh] flex flex-col animate-in fade-in zoom-in-95 duration-150">
+      <div className="brutal-card bg-white w-full max-w-3xl overflow-hidden max-h-[92vh] flex flex-col animate-in fade-in zoom-in-95 duration-150">
         {/* Header */}
         <div className="bg-[#1769FF] text-white px-5 py-3 border-b-2 border-[#111111] flex items-center justify-between">
           <div className="flex items-center gap-3">
             <h3 className="text-base font-black tracking-tight">
               {cardToEdit ? t('Edit Flashcard') : t('Add New Flashcard')}
             </h3>
-            {/* View Mode Toggle */}
+            {/* View Mode Toggle: edit shows live preview alongside; preview is full-width */}
             <div className="flex bg-black/30 p-0.5 rounded border border-black text-xs font-bold">
               <button
                 type="button"
@@ -120,65 +132,100 @@ export const CardEditorModal: React.FC<CardEditorModalProps> = ({
 
         {/* Content Area */}
         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-5 space-y-4">
-          {/* Quick math formula snippets helper */}
-          <div className="p-2.5 bg-[#F8F7F2] border-2 border-[#111111] rounded shadow-[2px_2px_0px_#111111]">
-            <span className="text-[11px] font-black uppercase text-zinc-600 block mb-1.5">
-              {t('Quick LaTeX Math Inserts:')}
-            </span>
-            <div className="flex flex-wrap gap-1.5">
-              {[
-                { label: 'Integral', code: '$$\\int x^2 \\, dx = \\frac{x^3}{3} + C$$' },
-                { label: 'Fraction', code: '$$\\frac{\\partial y}{\\partial x}$$' },
-                { label: 'Vector Force', code: '$$\\vec{F} = m \\cdot \\vec{a}$$' },
-                { label: 'Gas Law', code: '$$PV = nRT$$' },
-                { label: 'Limit', code: '$$\\lim_{x \\to 0} f(x)$$' }
-              ].map((snip) => (
+          {/* Categorized formula picker with custom formulas + live hover previews */}
+          <FormulaPicker
+            templates={getAllTemplates(customFormulas)}
+            activeCategory={formulaCategory}
+            onCategoryChange={(cat) => {
+              setFormulaCategory(cat);
+              if (isAddFormulaOpen) setIsAddFormulaOpen(false);
+            }}
+            onInsert={(code) => insertMathSnippet(snippetTarget, code)}
+            onDeleteTemplate={onDeleteFormula}
+            onAddFormula={(tmpl) => {
+              onAddFormula(tmpl);
+              setIsAddFormulaOpen(false);
+              setFormulaCategory(tmpl.category);
+            }}
+            onOpenAddForm={() => setIsAddFormulaOpen((v) => !v)}
+            isAddFormOpen={isAddFormulaOpen}
+            target={snippetTarget}
+          />
+          {/* Target selector: which textarea receives inserted snippets */}
+          <div className="flex items-center gap-2 -mt-2">
+            <span className="text-[10px] font-black uppercase text-zinc-500">{t('Insert into:')}</span>
+            <div className="flex bg-[#F8F7F2] border-2 border-[#111111] rounded overflow-hidden">
+              {(['front', 'back'] as const).map((side) => (
                 <button
-                  key={snip.label}
+                  key={side}
                   type="button"
-                  onClick={() => insertMathSnippet('front', snip.code)}
-                  className="px-2 py-1 bg-white border border-[#111111] rounded text-[11px] font-bold text-zinc-800 shadow-[1px_1px_0px_#111111] hover:bg-zinc-100"
+                  onClick={() => setSnippetTarget(side)}
+                  className={`px-2 py-0.5 text-[10px] font-black ${
+                    snippetTarget === side ? 'bg-[#1769FF] text-white' : 'text-zinc-700 hover:bg-zinc-100'
+                  }`}
                 >
-                  +{t(snip.label)}
+                  {side === 'front' ? t('Front') : t('Back (Solution)')}
                 </button>
               ))}
             </div>
+            {!isAddFormulaOpen ? null : (
+              <span className="text-[10px] font-semibold text-zinc-500">
+                {t('Type in the editor — preview updates automatically.')}
+              </span>
+            )}
           </div>
 
           {activeTab === 'edit' ? (
-            <>
+            /* Edit mode: textareas with auto live-preview panes next to them */
+            <div className="space-y-4">
               {/* Front Side */}
-              <div>
-                <label className="block text-xs font-black uppercase tracking-wider text-zinc-700 mb-1">
-                  {t('Card Front (Question / Prompt) *')}
-                </label>
-                <textarea
-                  rows={4}
-                  required
-                  placeholder="### Question Title&#10;What is the formula for...&#10;$$\int x^2 dx$$"
-                  value={front}
-                  onChange={(e) => setFront(e.target.value)}
-                  className="brutal-input font-mono text-sm leading-relaxed"
-                />
+              <div className="grid gap-3 md:grid-cols-2">
+                <div>
+                  <label className="block text-xs font-black uppercase tracking-wider text-zinc-700 mb-1">
+                    {t('Card Front (Question / Prompt) *')}
+                  </label>
+                  <textarea
+                    rows={5}
+                    required
+                    placeholder="### Question Title&#10;What is the formula for...&#10;$$\int x^2 dx$$"
+                    value={front}
+                    onChange={(e) => setFront(e.target.value)}
+                    className="brutal-input font-mono text-sm leading-relaxed"
+                  />
+                </div>
+                <div className="border-2 border-[#111111] rounded p-3 bg-white shadow-[2px_2px_0px_#111111] overflow-y-auto max-h-56">
+                  <span className="text-[10px] font-black uppercase px-2 py-0.5 bg-[#1769FF] text-white rounded border border-black mb-2 inline-block">
+                    {t('Front Side Preview')}
+                  </span>
+                  <MathMarkdown content={front || `*${t('No front content written yet.')}*`} />
+                </div>
               </div>
 
               {/* Back Side */}
-              <div>
-                <label className="block text-xs font-black uppercase tracking-wider text-zinc-700 mb-1">
-                  {t('Card Back (Answer / Solution) *')}
-                </label>
-                <textarea
-                  rows={5}
-                  required
-                  placeholder="### Solution&#10;$$\int x^2 dx = \frac{x^3}{3} + C$$&#10;*Explanation in English or Thai*"
-                  value={back}
-                  onChange={(e) => setBack(e.target.value)}
-                  className="brutal-input font-mono text-sm leading-relaxed"
-                />
+              <div className="grid gap-3 md:grid-cols-2">
+                <div>
+                  <label className="block text-xs font-black uppercase tracking-wider text-zinc-700 mb-1">
+                    {t('Card Back (Answer / Solution) *')}
+                  </label>
+                  <textarea
+                    rows={5}
+                    required
+                    placeholder="### Solution&#10;$$\int x^2 dx = \frac{x^3}{3} + C$$&#10;*Explanation in English or Thai*"
+                    value={back}
+                    onChange={(e) => setBack(e.target.value)}
+                    className="brutal-input font-mono text-sm leading-relaxed"
+                  />
+                </div>
+                <div className="border-2 border-[#111111] rounded p-3 bg-white shadow-[2px_2px_0px_#111111] overflow-y-auto max-h-56">
+                  <span className="text-[10px] font-black uppercase px-2 py-0.5 bg-[#12A05C] text-white rounded border border-black mb-2 inline-block">
+                    {t('Back Side Preview')}
+                  </span>
+                  <MathMarkdown content={back || `*${t('No back content written yet.')}*`} />
+                </div>
               </div>
-            </>
+            </div>
           ) : (
-            /* Live Preview Mode */
+            /* Full-width Preview Mode */
             <div className="space-y-4">
               <div className="border-2 border-[#111111] rounded p-4 bg-white shadow-[2px_2px_0px_#111111]">
                 <span className="text-[10px] font-black uppercase px-2 py-0.5 bg-[#1769FF] text-white rounded border border-black mb-2 inline-block">

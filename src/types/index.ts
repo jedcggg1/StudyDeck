@@ -39,6 +39,15 @@ export interface ReviewLog {
   reviewedAt: number;     // Timestamp in ms
 }
 
+export interface FormulaTemplate {
+  id: string;
+  name: string;
+  category: string;
+  code: string;           // LaTeX/markdown snippet to insert
+  description?: string;
+  isCustom?: boolean;     // User-added templates
+}
+
 export interface AppSettings {
   id: string;             // Fixed key 'app_settings'
   theme: 'brutalist-light' | 'brutalist-high-contrast' | 'brutalist-dark';
@@ -49,6 +58,7 @@ export interface AppSettings {
   hasCompletedOnboarding: boolean;
   syncServerUrl?: string;
   lastSyncTimestamp?: number;
+  formulaTemplates?: FormulaTemplate[];
 }
 
 export interface SM2State {
