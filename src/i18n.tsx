@@ -128,7 +128,7 @@ const THAI_TRANSLATIONS: Record<string, string> = {
   'Save Changes': 'บันทึกการเปลี่ยนแปลง',
   'Add New Flashcard': 'เพิ่มแฟลชการ์ดใหม่',
   Editor: 'แก้ไข',
-  'Live Preview': 'ดูตัวอย่างทันที',
+
   'Quick LaTeX Math Inserts:': 'แทรกสูตรคณิตศาสตร์ LaTeX ได้ทันที:',
   'Quick Inserts:': 'แทรกด่วน:',
   'Add Formula': 'เพิ่มสูตร',
