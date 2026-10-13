@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { ArrowLeft, Plus, Play, Search, Edit, Trash2, Calendar, Repeat } from 'lucide-react';
 import { Deck, Flashcard } from '../types';
 import { MathMarkdown } from '../components/MathMarkdown';
+import { ConfirmDialog } from '../components/ConfirmDialog';
 import { isCardDue } from '../services/sm2';
 import { useTranslation } from '../i18n';
 
@@ -27,6 +28,8 @@ export const DeckDetailPage: React.FC<DeckDetailPageProps> = ({
   onDeleteCard
 }) => {
   const [search, setSearch] = useState('');
+  const [pendingDeckDelete, setPendingDeckDelete] = useState(false);
+  const [pendingCardDelete, setPendingCardDelete] = useState<{ id: string; front: string } | null>(null);
   const { t } = useTranslation();
 
   const deckCards = useMemo(() => {
@@ -110,14 +113,7 @@ export const DeckDetailPage: React.FC<DeckDetailPageProps> = ({
               </button>
 
               <button
-                onClick={() => {
-                  if (confirm(t('Delete deck "{title}" and its {count} cards?', {
-                    title: deck.title,
-                    count: deckCards.length
-                  }))) {
-                    onDeleteDeck(deck.id);
-                  }
-                }}
+                onClick={() => setPendingDeckDelete(true)}
                 className="brutal-btn !bg-red-50 !text-red-700 !border-red-700 !shadow-[2px_2px_0px_#b91c1c] !text-xs justify-center"
               >
                 <Trash2 className="w-4 h-4" />
@@ -214,11 +210,7 @@ export const DeckDetailPage: React.FC<DeckDetailPageProps> = ({
                       <Edit className="w-4 h-4" />
                     </button>
                     <button
-                      onClick={() => {
-                        if (confirm(t('Delete this flashcard?'))) {
-                          onDeleteCard(card.id);
-                        }
-                      }}
+                      onClick={() => setPendingCardDelete({ id: card.id, front: card.front })}
                       className="p-1.5 bg-white text-red-600 border border-black rounded hover:bg-red-50 shadow-[1px_1px_0px_#000]"
                       title={t('Delete Flashcard')}
                     >
@@ -230,6 +222,35 @@ export const DeckDetailPage: React.FC<DeckDetailPageProps> = ({
             );
           })}
         </div>
+      )}
+
+      {/* In-app delete confirmations (replace native confirm) */}
+      {pendingDeckDelete && (
+        <ConfirmDialog
+          title={t('Delete deck?')}
+          message={t('Delete deck "{title}" and its {count} cards?', {
+            title: deck.title,
+            count: deckCards.length
+          })}
+          confirmLabel={t('Delete Deck')}
+          onConfirm={() => {
+            setPendingDeckDelete(false);
+            onDeleteDeck(deck.id);
+          }}
+          onCancel={() => setPendingDeckDelete(false)}
+        />
+      )}
+      {pendingCardDelete && (
+        <ConfirmDialog
+          title={t('Delete flashcard?')}
+          message={t('This flashcard and its review history will be permanently deleted.')}
+          confirmLabel={t('Delete Flashcard')}
+          onConfirm={() => {
+            setPendingCardDelete(null);
+            onDeleteCard(pendingCardDelete.id);
+          }}
+          onCancel={() => setPendingCardDelete(null)}
+        />
       )}
     </div>
   );

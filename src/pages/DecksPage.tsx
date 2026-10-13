@@ -17,6 +17,7 @@ import {
 import { Deck, Flashcard } from '../types';
 import { isCardDue } from '../services/sm2';
 import { createExportPayload, downloadJsonFile, serializeExport } from '../services/importExport';
+import { ConfirmDialog } from '../components/ConfirmDialog';
 import { useTranslation } from '../i18n';
 
 interface DecksPageProps {
@@ -45,6 +46,7 @@ export const DecksPage: React.FC<DecksPageProps> = ({
   const { t } = useTranslation();
   const [selectedTag, setSelectedTag] = useState<string>('all');
   const [localSearch, setLocalSearch] = useState<string>('');
+  const [pendingDelete, setPendingDelete] = useState<{ id: string; title: string; count: number } | null>(null);
 
   // Extract all unique tags
   const allTags = useMemo(() => {
@@ -290,11 +292,7 @@ export const DecksPage: React.FC<DecksPageProps> = ({
                     <Download className="w-4 h-4" />
                   </button>
                   <button
-                    onClick={() => {
-                      if (confirm(`Delete deck "${deck.title}" and its ${total} cards?`)) {
-                        onDeleteDeck(deck.id);
-                      }
-                    }}
+                    onClick={() => setPendingDelete({ id: deck.id, title: deck.title, count: total })}
                     className="brutal-icon-btn bg-white border border-[#111111] rounded text-red-600 hover:bg-red-50 shadow-[1px_1px_0px_#111111]"
                     title={t('Delete Deck')}
                     aria-label={t('Delete Deck')}
@@ -334,6 +332,24 @@ export const DecksPage: React.FC<DecksPageProps> = ({
           );
         })}
       </div>
+      )}
+
+      {/* In-app delete confirmation (replaces native confirm) */}
+      {pendingDelete && (
+        <ConfirmDialog
+          title={t('Delete deck?')}
+          message={t('Delete deck "{title}" and its {count} cards?', {
+            title: pendingDelete.title,
+            count: pendingDelete.count
+          })}
+          confirmLabel={t('Delete Deck')}
+          onConfirm={() => {
+            const id = pendingDelete.id;
+            setPendingDelete(null);
+            onDeleteDeck(id);
+          }}
+          onCancel={() => setPendingDelete(null)}
+        />
       )}
     </div>
   );

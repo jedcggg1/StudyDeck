@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { AppSettings, Deck, Flashcard } from '../types';
 import { createExportPayload, downloadJsonFile, serializeExport } from '../services/importExport';
+import { ConfirmDialog } from '../components/ConfirmDialog';
 import { useTranslation } from '../i18n';
 
 interface SettingsPageProps {
@@ -36,6 +37,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
   const { t } = useTranslation();
   const [deleteConfirmation, setDeleteConfirmation] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
   const [syncEndpoint, setSyncEndpoint] = useState(settings.syncServerUrl || '');
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
 
@@ -202,11 +204,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
           </button>
 
           <button
-            onClick={async () => {
-              if (confirm(t('Re-seed default Calculus, Chemistry, and Physics sample decks?'))) {
-                await onResetSampleData();
-              }
-            }}
+            onClick={() => setIsResetConfirmOpen(true)}
             className="brutal-btn bg-white !text-xs"
           >
             <RefreshCw className="w-4 h-4" />
@@ -270,6 +268,19 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
             </div>
           </div>
         </div>
+      )}
+      {isResetConfirmOpen && (
+        <ConfirmDialog
+          title={t('Reload starter decks?')}
+          message={t('This will ADD the default Calculus, Chemistry, and Physics sample decks to your current data.')}
+          tone="primary"
+          confirmLabel={t('Reload')}
+          onConfirm={() => {
+            setIsResetConfirmOpen(false);
+            void onResetSampleData();
+          }}
+          onCancel={() => setIsResetConfirmOpen(false)}
+        />
       )}
     </div>
   );

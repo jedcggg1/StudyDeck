@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Trash2, Upload, ImagePlus } from 'lucide-react';
 import { Deck } from '../types';
+import { ConfirmDialog } from './ConfirmDialog';
 import { useTranslation } from '../i18n';
 
 interface DeckEditorModalProps {
@@ -42,6 +43,7 @@ export const DeckEditorModal: React.FC<DeckEditorModalProps> = ({
   const [tagsInput, setTagsInput] = useState('');
   const [iconError, setIconError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const iconInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -269,14 +271,7 @@ export const DeckEditorModal: React.FC<DeckEditorModalProps> = ({
             {deckToEdit && onDelete ? (
               <button
                 type="button"
-                onClick={() => {
-                  if (confirm(t('Are you sure you want to delete deck "{title}" and all its flashcards?', {
-                    title: deckToEdit.title
-                  }))) {
-                    onDelete(deckToEdit.id);
-                    onClose();
-                  }
-                }}
+                onClick={() => setIsDeleteConfirmOpen(true)}
                 className="brutal-btn !bg-red-50 !text-red-700 !border-red-700 !shadow-[2px_2px_0px_#b91c1c] !py-2 !px-3 !text-xs"
               >
                 <Trash2 className="w-4 h-4" />
@@ -303,6 +298,23 @@ export const DeckEditorModal: React.FC<DeckEditorModalProps> = ({
           </div>
         </form>
       </div>
+
+      {/* In-app delete confirmation (replaces native confirm) */}
+      {isDeleteConfirmOpen && deckToEdit && (
+        <ConfirmDialog
+          title={t('Delete deck?')}
+          message={t('Are you sure you want to delete deck "{title}" and all its flashcards?', {
+            title: deckToEdit.title
+          })}
+          confirmLabel={t('Delete Deck')}
+          onConfirm={() => {
+            setIsDeleteConfirmOpen(false);
+            onDelete?.(deckToEdit.id);
+            onClose();
+          }}
+          onCancel={() => setIsDeleteConfirmOpen(false)}
+        />
+      )}
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormulaTemplate } from '../types';
 import { MathMarkdown } from './MathMarkdown';
+import { ConfirmDialog } from './ConfirmDialog';
 import { useTranslation } from '../i18n';
 
 interface FormulaPickerProps {
@@ -50,6 +51,12 @@ export const FormulaPicker: React.FC<FormulaPickerProps> = ({
   const { t } = useTranslation();
   const [isAddCatOpen, setIsAddCatOpen] = React.useState(false);
   const [newCatName, setNewCatName] = React.useState('');
+  /** Pending destructive action shown in the ConfirmDialog */
+  const [pendingDelete, setPendingDelete] = React.useState<
+    | { kind: 'category'; name: string }
+    | { kind: 'formula'; id: string; name: string }
+    | null
+  >(null);
 
   const categories = React.useMemo(() => {
     const seen = new Set<string>();
@@ -112,9 +119,7 @@ export const FormulaPicker: React.FC<FormulaPickerProps> = ({
                 <button
                   type="button"
                   title={t('Delete this category and its formulas')}
-                  onClick={() => {
-                    if (confirm(t('Delete this category and all formulas in it?'))) onDeleteCategory(cat);
-                  }}
+                  onClick={() => setPendingDelete({ kind: 'category', name: cat })}
                   className={`absolute -top-1.5 -right-1.5 w-3.5 h-3.5 bg-[#FA5252] text-white text-[9px] font-black rounded-full border border-[#111111] items-center justify-center ${
                     showDeleteX ? 'flex' : 'hidden group-hover/cat:flex'
                   }`}
@@ -215,9 +220,7 @@ export const FormulaPicker: React.FC<FormulaPickerProps> = ({
                 <button
                   type="button"
                   title={t('Delete this custom formula')}
-                  onClick={() => {
-                    if (confirm(t('Delete this custom formula?'))) onDeleteTemplate(tmpl.id);
-                  }}
+                  onClick={() => setPendingDelete({ kind: 'formula', id: tmpl.id, name: tmpl.name })}
                   className="absolute -top-1.5 -right-1.5 w-3.5 h-3.5 bg-[#FA5252] text-white text-[9px] font-black rounded-full border border-[#111111] items-center justify-center hidden group-hover:flex group-focus-within:flex"
                 >
                   ✕
@@ -230,6 +233,32 @@ export const FormulaPicker: React.FC<FormulaPickerProps> = ({
             </div>
           ))}
         </div>
+      )}
+
+      {/* In-app delete confirmation (replaces native confirm) */}
+      {pendingDelete?.kind === 'category' && (
+        <ConfirmDialog
+          title={t('Delete category?')}
+          message={t('"{name}" and ALL formulas inside it will be permanently deleted.', { name: pendingDelete.name })}
+          confirmLabel={t('Delete Category')}
+          onConfirm={() => {
+            onDeleteCategory(pendingDelete.name);
+            setPendingDelete(null);
+          }}
+          onCancel={() => setPendingDelete(null)}
+        />
+      )}
+      {pendingDelete?.kind === 'formula' && (
+        <ConfirmDialog
+          title={t('Delete formula?')}
+          message={t('"{name}" will be permanently removed from your custom formulas.', { name: pendingDelete.name })}
+          confirmLabel={t('Delete Formula')}
+          onConfirm={() => {
+            onDeleteTemplate(pendingDelete.id);
+            setPendingDelete(null);
+          }}
+          onCancel={() => setPendingDelete(null)}
+        />
       )}
     </div>
   );

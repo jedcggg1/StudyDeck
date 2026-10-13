@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Edit3, Trash2 } from 'lucide-react';
 import { Flashcard, FormulaTemplate } from '../types';
 import { MathMarkdown } from './MathMarkdown';
+import { ConfirmDialog } from './ConfirmDialog';
 import { FormulaPicker } from './FormulaPicker';
 import { getAllTemplates } from '../data/formulaTemplates';
 import { useTranslation } from '../i18n';
@@ -45,6 +46,7 @@ export const CardEditorModal: React.FC<CardEditorModalProps> = ({
   const [formulaCategory, setFormulaCategory] = useState('Math');
   const [isAddFormulaOpen, setIsAddFormulaOpen] = useState(false);
   const [snippetTarget, setSnippetTarget] = useState<'front' | 'back'>('front');
+  const [pendingDelete, setPendingDelete] = useState(false);
 
   useEffect(() => {
     if (cardToEdit) {
@@ -241,12 +243,7 @@ export const CardEditorModal: React.FC<CardEditorModalProps> = ({
             {cardToEdit && onDelete ? (
               <button
                 type="button"
-                onClick={() => {
-                  if (confirm(t('Delete this flashcard?'))) {
-                    onDelete(cardToEdit.id);
-                    onClose();
-                  }
-                }}
+                onClick={() => setPendingDelete(true)}
                 className="brutal-btn !bg-red-50 !text-red-700 !border-red-700 !shadow-[2px_2px_0px_#b91c1c] !py-2 !px-3 !text-xs"
               >
                 <Trash2 className="w-4 h-4" />
@@ -273,6 +270,21 @@ export const CardEditorModal: React.FC<CardEditorModalProps> = ({
           </div>
         </form>
       </div>
+
+      {/* In-app delete confirmation (replaces native confirm) */}
+      {pendingDelete && (
+        <ConfirmDialog
+          title={t('Delete flashcard?')}
+          message={t('This flashcard and its review history will be permanently deleted.')}
+          confirmLabel={t('Delete Card')}
+          onConfirm={() => {
+            setPendingDelete(false);
+            if (cardToEdit) onDelete?.(cardToEdit.id);
+            onClose();
+          }}
+          onCancel={() => setPendingDelete(false)}
+        />
+      )}
     </div>
   );
 };
