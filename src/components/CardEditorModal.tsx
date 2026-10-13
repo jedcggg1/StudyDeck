@@ -47,6 +47,8 @@ export const CardEditorModal: React.FC<CardEditorModalProps> = ({
   const [isAddFormulaOpen, setIsAddFormulaOpen] = useState(false);
   const [snippetTarget, setSnippetTarget] = useState<'front' | 'back'>('front');
   const [pendingDelete, setPendingDelete] = useState(false);
+  /** Mobile: which preview pane is expanded (tap-to-expand full width) */
+  const [mobilePreview, setMobilePreview] = useState<'front' | 'back' | null>(null);
 
   useEffect(() => {
     if (cardToEdit) {
@@ -97,8 +99,8 @@ export const CardEditorModal: React.FC<CardEditorModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-      <div className="brutal-card bg-white w-full max-w-3xl overflow-hidden max-h-[92vh] flex flex-col animate-in fade-in zoom-in-95 duration-150">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 max-md:p-0 bg-black/60 backdrop-blur-xs">
+      <div className="brutal-card bg-white w-full max-w-3xl overflow-hidden max-h-[92vh] flex flex-col animate-in fade-in zoom-in-95 duration-150 max-md:h-dvh max-md:max-h-none max-md:rounded-none max-md:border-0 max-md:shadow-none">
         {/* Header */}
         <div className="bg-[#1769FF] text-white px-5 py-3 border-b-2 border-[#111111] flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -193,12 +195,26 @@ export const CardEditorModal: React.FC<CardEditorModalProps> = ({
                     className="brutal-input font-mono text-sm leading-relaxed"
                   />
                 </div>
-                <div className="border-2 border-[#111111] rounded p-3 bg-white shadow-[2px_2px_0px_#111111] overflow-y-auto max-h-56">
+                <div className={
+                  mobilePreview === 'front'
+                    ? 'border-2 border-[#111111] rounded p-3 bg-white shadow-[2px_2px_0px_#111111]'
+                    : 'hidden md:block border-2 border-[#111111] rounded p-3 bg-white shadow-[2px_2px_0px_#111111] overflow-y-auto max-h-56'
+                }>
                   <span className="text-[10px] font-black uppercase px-2 py-0.5 bg-[#1769FF] text-white rounded border border-black mb-2 inline-block">
                     {t('Front Side Preview')}
                   </span>
                   <MathMarkdown content={front || `*${t('No front content written yet.')}*`} />
                 </div>
+                {/* Mobile: tap to expand the preview full width */}
+                <button
+                  type="button"
+                  onClick={() => setMobilePreview(mobilePreview === 'front' ? null : 'front')}
+                  className="md:hidden brutal-btn bg-white !py-1.5 !px-3 !text-xs"
+                >
+                  {mobilePreview === 'front'
+                    ? `↑ ${t('Hide preview')}`
+                    : `👁 ${t('Show preview')}`}
+                </button>
               </div>
 
               {/* Back Side */}
@@ -216,12 +232,26 @@ export const CardEditorModal: React.FC<CardEditorModalProps> = ({
                     className="brutal-input font-mono text-sm leading-relaxed"
                   />
                 </div>
-                <div className="border-2 border-[#111111] rounded p-3 bg-white shadow-[2px_2px_0px_#111111] overflow-y-auto max-h-56">
+                <div className={
+                  mobilePreview === 'back'
+                    ? 'border-2 border-[#111111] rounded p-3 bg-white shadow-[2px_2px_0px_#111111]'
+                    : 'hidden md:block border-2 border-[#111111] rounded p-3 bg-white shadow-[2px_2px_0px_#111111] overflow-y-auto max-h-56'
+                }>
                   <span className="text-[10px] font-black uppercase px-2 py-0.5 bg-[#12A05C] text-white rounded border border-black mb-2 inline-block">
                     {t('Back Side Preview')}
                   </span>
                   <MathMarkdown content={back || `*${t('No back content written yet.')}*`} />
                 </div>
+                {/* Mobile: tap to expand the preview full width */}
+                <button
+                  type="button"
+                  onClick={() => setMobilePreview(mobilePreview === 'back' ? null : 'back')}
+                  className="md:hidden brutal-btn bg-white !py-1.5 !px-3 !text-xs"
+                >
+                  {mobilePreview === 'back'
+                    ? `↑ ${t('Hide preview')}`
+                    : `👁 ${t('Show preview')}`}
+                </button>
               </div>
             </div>
 

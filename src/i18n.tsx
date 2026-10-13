@@ -159,6 +159,8 @@ const THAI_TRANSLATIONS: Record<string, string> = {
   'Category *': 'หมวดหมู่ *',
   'LaTeX / Markdown, e.g. $$x^2+1$$': 'LaTeX / Markdown เช่น $$x^2+1$$',
   Preview: 'ตัวอย่าง',
+  'Show preview': 'ดูตัวอย่าง',
+  'Hide preview': 'ซ่อนตัวอย่าง',
   'Save Formula': 'บันทึกสูตร',
   'Insert into:': 'แทรกลง:',
   'Type in the editor — preview updates automatically.': 'พิมพ์ในตัวแก้ไข — ตัวอย่างอัปเดตให้อัตโนมัติ',
