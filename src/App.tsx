@@ -529,7 +529,12 @@ export function App() {
         }}
         onDeleteCategory={(name: string) => {
           const current = settings?.customFormulaCategories ?? [];
-          void handleUpdateSettings({ customFormulaCategories: current.filter((c) => c !== name) });
+          const currentFormulas = settings?.formulaTemplates ?? [];
+          // Remove the category AND every custom formula inside it, so no orphan formulas remain
+          void handleUpdateSettings({
+            customFormulaCategories: current.filter((c) => c !== name),
+            formulaTemplates: currentFormulas.filter((f) => f.category !== name),
+          });
         }}
         onClose={() => {
           setIsCardModalOpen(false);

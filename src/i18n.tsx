@@ -136,6 +136,8 @@ const THAI_TRANSLATIONS: Record<string, string> = {
   'Category name *': 'ชื่อหมวด *',
   'Delete this custom category': 'ลบหมวดที่เพิ่มเองนี้',
   'Delete this custom category?': 'ลบหมวดที่เพิ่มเองนี้ไหม?',
+  'Delete this category and its formulas': 'ลบหมวดนี้ (พร้อมสูตรข้างใน)',
+  'Delete this category and all formulas in it?': 'ลบหมวดนี้พร้อมสูตรทั้งหมดข้างในไหม?',
   Save: 'บันทึก',
   'Use "+ Add Formula" to add one.': 'กด "+ เพิ่มสูตร" เพื่อเพิ่มสูตรได้เลย',
   Close: 'ปิด',

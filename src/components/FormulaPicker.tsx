@@ -15,7 +15,7 @@ interface FormulaPickerProps {
   onAddFormula: (tmpl: FormulaTemplate) => void;
   /** Create a new empty category */
   onAddCategory: (name: string) => void;
-  /** Delete a user-created empty category */
+  /** Delete a user-created category and all formulas inside it */
   onDeleteCategory: (name: string) => void;
   onOpenAddForm: () => void;
   isAddFormOpen: boolean;
@@ -29,6 +29,9 @@ const CATEGORY_ICON: Record<string, string> = {
   Chemistry: '⚗',
   Markdown: 'M↓',
 };
+
+/** Built-in categories cannot be renamed/deleted by users */
+const BUILTIN_CATEGORIES = Object.keys(CATEGORY_ICON);
 
 export const FormulaPicker: React.FC<FormulaPickerProps> = ({
   templates,
@@ -86,7 +89,11 @@ export const FormulaPicker: React.FC<FormulaPickerProps> = ({
           {t('Quick Inserts:')}
         </span>
         {categories.map((cat) => {
-          const isCustomCategory = customCategories.includes(cat);
+          // Every non-builtin category belongs to the user (added via "+ Add Category"
+          // or by typing a new category name in the add-formula form) → deletable
+          const isCustomCategory = !BUILTIN_CATEGORIES.includes(cat);
+          // Show ✕ on hover OR while this tab is selected/clicked (touch-friendly)
+          const showDeleteX = isCustomCategory && cat === activeCategory;
           return (
             <div key={cat} className="relative group/cat">
               <button
@@ -104,11 +111,13 @@ export const FormulaPicker: React.FC<FormulaPickerProps> = ({
               {isCustomCategory && (
                 <button
                   type="button"
-                  title={t('Delete this custom category')}
+                  title={t('Delete this category and its formulas')}
                   onClick={() => {
-                    if (confirm(t('Delete this custom category?'))) onDeleteCategory(cat);
+                    if (confirm(t('Delete this category and all formulas in it?'))) onDeleteCategory(cat);
                   }}
-                  className="absolute -top-1.5 -right-1.5 w-3.5 h-3.5 bg-[#FA5252] text-white text-[9px] font-black rounded-full border border-[#111111] items-center justify-center hidden group-hover/cat:flex"
+                  className={`absolute -top-1.5 -right-1.5 w-3.5 h-3.5 bg-[#FA5252] text-white text-[9px] font-black rounded-full border border-[#111111] items-center justify-center ${
+                    showDeleteX ? 'flex' : 'hidden group-hover/cat:flex'
+                  }`}
                 >
                   ✕
                 </button>
@@ -201,6 +210,7 @@ export const FormulaPicker: React.FC<FormulaPickerProps> = ({
               >
                 +{tmpl.name}
               </button>
+              {/* Custom formulas can be deleted (hover/focus ✕) */}
               {tmpl.isCustom && (
                 <button
                   type="button"
@@ -208,7 +218,7 @@ export const FormulaPicker: React.FC<FormulaPickerProps> = ({
                   onClick={() => {
                     if (confirm(t('Delete this custom formula?'))) onDeleteTemplate(tmpl.id);
                   }}
-                  className="absolute -top-1.5 -right-1.5 w-3.5 h-3.5 bg-[#FA5252] text-white text-[9px] font-black rounded-full border border-[#111111] items-center justify-center hidden group-hover:flex"
+                  className="absolute -top-1.5 -right-1.5 w-3.5 h-3.5 bg-[#FA5252] text-white text-[9px] font-black rounded-full border border-[#111111] items-center justify-center hidden group-hover:flex group-focus-within:flex"
                 >
                   ✕
                 </button>
