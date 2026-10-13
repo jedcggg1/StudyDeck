@@ -59,6 +59,7 @@ export interface AppSettings {
   syncServerUrl?: string;
   lastSyncTimestamp?: number;
   formulaTemplates?: FormulaTemplate[];
+  customFormulaCategories?: string[];
 }
 
 export interface SM2State {

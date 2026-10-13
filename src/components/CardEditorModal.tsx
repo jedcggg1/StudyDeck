@@ -12,8 +12,12 @@ interface CardEditorModalProps {
   cardToEdit?: Flashcard | null;
   /** User-defined formula templates (from AppSettings) */
   customFormulas: FormulaTemplate[];
+  /** User-created empty formula categories (from AppSettings) */
+  customCategories: string[];
   onAddFormula: (tmpl: FormulaTemplate) => void;
   onDeleteFormula: (id: string) => void;
+  onAddCategory: (name: string) => void;
+  onDeleteCategory: (name: string) => void;
   onClose: () => void;
   onSave: (cardData: Omit<Flashcard, 'id' | 'createdAt' | 'updatedAt' | 'repetition' | 'interval' | 'easeFactor' | 'nextReviewDate'>, cardId?: string) => Promise<void>;
   onDelete?: (id: string) => Promise<void>;
@@ -24,8 +28,11 @@ export const CardEditorModal: React.FC<CardEditorModalProps> = ({
   deckId,
   cardToEdit,
   customFormulas,
+  customCategories,
   onAddFormula,
   onDeleteFormula,
+  onAddCategory,
+  onDeleteCategory,
   onClose,
   onSave,
   onDelete
@@ -135,6 +142,7 @@ export const CardEditorModal: React.FC<CardEditorModalProps> = ({
           {/* Categorized formula picker with custom formulas + live hover previews */}
           <FormulaPicker
             templates={getAllTemplates(customFormulas)}
+            customCategories={customCategories}
             activeCategory={formulaCategory}
             onCategoryChange={(cat) => {
               setFormulaCategory(cat);
@@ -147,6 +155,8 @@ export const CardEditorModal: React.FC<CardEditorModalProps> = ({
               setIsAddFormulaOpen(false);
               setFormulaCategory(tmpl.category);
             }}
+            onAddCategory={onAddCategory}
+            onDeleteCategory={onDeleteCategory}
             onOpenAddForm={() => setIsAddFormulaOpen((v) => !v)}
             isAddFormOpen={isAddFormulaOpen}
             target={snippetTarget}

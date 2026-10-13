@@ -513,6 +513,7 @@ export function App() {
         deckId={cardModalDeckId}
         cardToEdit={editingCard}
         customFormulas={settings?.formulaTemplates ?? []}
+        customCategories={settings?.customFormulaCategories ?? []}
         onAddFormula={(tmpl: FormulaTemplate) => {
           const current = settings?.formulaTemplates ?? [];
           void handleUpdateSettings({ formulaTemplates: [...current, tmpl] });
@@ -520,6 +521,15 @@ export function App() {
         onDeleteFormula={(id: string) => {
           const current = settings?.formulaTemplates ?? [];
           void handleUpdateSettings({ formulaTemplates: current.filter((f) => f.id !== id) });
+        }}
+        onAddCategory={(name: string) => {
+          const current = settings?.customFormulaCategories ?? [];
+          if (current.includes(name)) return;
+          void handleUpdateSettings({ customFormulaCategories: [...current, name] });
+        }}
+        onDeleteCategory={(name: string) => {
+          const current = settings?.customFormulaCategories ?? [];
+          void handleUpdateSettings({ customFormulaCategories: current.filter((c) => c !== name) });
         }}
         onClose={() => {
           setIsCardModalOpen(false);
