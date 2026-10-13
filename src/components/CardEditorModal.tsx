@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Eye, Edit3, Trash2 } from 'lucide-react';
+import { X, Edit3, Trash2 } from 'lucide-react';
 import { Flashcard, FormulaTemplate } from '../types';
 import { MathMarkdown } from './MathMarkdown';
 import { FormulaPicker } from './FormulaPicker';
@@ -41,7 +41,6 @@ export const CardEditorModal: React.FC<CardEditorModalProps> = ({
   const [front, setFront] = useState('');
   const [back, setBack] = useState('');
   const [tagsInput, setTagsInput] = useState('');
-  const [activeTab, setActiveTab] = useState<'edit' | 'preview'>('edit');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formulaCategory, setFormulaCategory] = useState('Math');
   const [isAddFormulaOpen, setIsAddFormulaOpen] = useState(false);
@@ -101,32 +100,11 @@ export const CardEditorModal: React.FC<CardEditorModalProps> = ({
         {/* Header */}
         <div className="bg-[#1769FF] text-white px-5 py-3 border-b-2 border-[#111111] flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <h3 className="text-base font-black tracking-tight">
+            <h3 className="text-base font-black tracking-tight flex items-center gap-2">
+              <Edit3 className="w-4 h-4" />
               {cardToEdit ? t('Edit Flashcard') : t('Add New Flashcard')}
             </h3>
-            {/* View Mode Toggle: edit shows live preview alongside; preview is full-width */}
-            <div className="flex bg-black/30 p-0.5 rounded border border-black text-xs font-bold">
-              <button
-                type="button"
-                onClick={() => setActiveTab('edit')}
-                className={`px-2.5 py-1 rounded flex items-center gap-1 ${
-                  activeTab === 'edit' ? 'bg-white text-black' : 'text-white hover:text-zinc-200'
-                }`}
-              >
-                <Edit3 className="w-3.5 h-3.5" />
-                {t('Editor')}
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveTab('preview')}
-                className={`px-2.5 py-1 rounded flex items-center gap-1 ${
-                  activeTab === 'preview' ? 'bg-white text-black' : 'text-white hover:text-zinc-200'
-                }`}
-              >
-                <Eye className="w-3.5 h-3.5" />
-                {t('Live Preview')}
-              </button>
-            </div>
+            {/* Live preview is always visible alongside the editor — no toggle needed */}
           </div>
 
           <button
@@ -196,9 +174,8 @@ export const CardEditorModal: React.FC<CardEditorModalProps> = ({
             )}
           </div>
 
-          {activeTab === 'edit' ? (
-            /* Edit mode: textareas with auto live-preview panes next to them */
-            <div className="space-y-4">
+          {/* Editor with always-on live preview panes */}
+          <div className="space-y-4">
               {/* Front Side */}
               <div className="grid gap-3 md:grid-cols-2">
                 <div>
@@ -245,24 +222,6 @@ export const CardEditorModal: React.FC<CardEditorModalProps> = ({
                 </div>
               </div>
             </div>
-          ) : (
-            /* Full-width Preview Mode */
-            <div className="space-y-4">
-              <div className="border-2 border-[#111111] rounded p-4 bg-white shadow-[2px_2px_0px_#111111]">
-                <span className="text-[10px] font-black uppercase px-2 py-0.5 bg-[#1769FF] text-white rounded border border-black mb-2 inline-block">
-                  {t('Front Side Preview')}
-                </span>
-                <MathMarkdown content={front || `*${t('No front content written yet.')}*`} />
-              </div>
-
-              <div className="border-2 border-[#111111] rounded p-4 bg-white shadow-[2px_2px_0px_#111111]">
-                <span className="text-[10px] font-black uppercase px-2 py-0.5 bg-[#12A05C] text-white rounded border border-black mb-2 inline-block">
-                  {t('Back Side Preview')}
-                </span>
-                <MathMarkdown content={back || `*${t('No back content written yet.')}*`} />
-              </div>
-            </div>
-          )}
 
           <div>
             <label className="block text-xs font-black uppercase tracking-wider text-zinc-700 mb-1">
